@@ -1,0 +1,61 @@
+services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis_container
+    networks:
+      - secure-app-network
+    ports:
+     - "6379:6379"
+  minio:
+    image: minio/minio
+    container_name: minio_container
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - secure-app-network
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER} # facendo così si prende i dati dal file .env nella stessa cartella
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio-data:/data
+  web:
+    build: .
+    container_name: webapp_container
+    ports:
+      - "5000:5000"
+    networks:
+      - secure-app-network
+    volumes:
+      - sqlite-data:/data
+    depends_on:
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+    environment:
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      REDIS_URL: ${REDIS_URL}
+  celery_worker:
+    build: .
+    command: celery -A app.celery worker --loglevel=info
+    networks:
+      - secure-app-network
+    environment:
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      REDIS_URL: ${REDIS_URL}   
+    volumes:
+      - sqlite-data:/data
+
+networks:
+  secure-app-network:
+    driver: bridge
+
+volumes:
+  sqlite-data:
+  minio-data:
