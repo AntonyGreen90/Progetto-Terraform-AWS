@@ -4,8 +4,8 @@ services:
     container_name: redis_container
     networks:
       - secure-app-network
-    ports:
-     - "6379:6379"
+    # ports:
+    #  - "6379:6379"
   minio:
     image: minio/minio
     container_name: minio_container
@@ -23,8 +23,8 @@ services:
   web:
     build: .
     container_name: webapp_container
-    ports:
-      - "5000:5000"
+    # ports:
+    #   - "5000:5000"
     networks:
       - secure-app-network
     volumes:
@@ -51,6 +51,16 @@ services:
       REDIS_URL: ${REDIS_URL}   
     volumes:
       - sqlite-data:/data
+  nginx:
+    build: ./nginx
+    container_name: nginx_proxycontainer
+    ports:
+      - "80:80"
+    depends_on:
+      web:
+        condition: service_started
+    networks:
+      - secure-app-network
 
 networks:
   secure-app-network:

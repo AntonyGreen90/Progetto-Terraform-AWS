@@ -1,3 +1,4 @@
-# per ora ignoro solo l'.env
+# *.env e file personali
 
 *.env
+interessanti.txt
