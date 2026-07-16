@@ -23,8 +23,8 @@ services:
   web:
     build: .
     container_name: webapp_container
-    # ports:
-    #   - "5000:5000"
+    expose: 
+      - "5000"
     networks:
       - secure-app-network
     volumes:
@@ -56,6 +56,9 @@ services:
     container_name: nginx_proxycontainer
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+       - ./nginx/ssl:/etc/nginx/ssl:ro
     depends_on:
       web:
         condition: service_started
