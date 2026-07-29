@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM nginx:latest
 
-COPY default.conf /etc/nginx/conf.d/default.conf
-COPY ../frontend/index.html /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY frontend/ /usr/share/nginx/html

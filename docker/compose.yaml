@@ -52,7 +52,9 @@ services:
     volumes:
       - sqlite-data:/data
   nginx:
-    build: ./nginx
+    build:
+      context: . 
+      dockerfile: ./nginx/Dockerfile
     container_name: nginx_proxycontainer
     ports:
       - "80:80"
