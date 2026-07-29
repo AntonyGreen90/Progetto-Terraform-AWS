@@ -182,11 +182,11 @@ Il Worker Celery ha memorizzato questo asset in S3.
     }
 
 # --- INTERFACCIA WEB (HTML / JAVASCRIPT CORRETTO PER LA STORICIZZAZIONE) ---
-# esportata
+# HTML_DASHBOARD, variabili esportata in index.html frontend
 
-@app.route("/")
-def index():
-    pass
+# @app.route("/")
+# def index():
+#     return render_template_string(HTML_DASHBOARD)
 
 @app.route("/submit-job", methods=["POST"])
 def submit_job():
