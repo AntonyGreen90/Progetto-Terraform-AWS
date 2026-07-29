@@ -188,7 +188,7 @@ Il Worker Celery ha memorizzato questo asset in S3.
 # def index():
 #     return render_template_string(HTML_DASHBOARD)
 
-@app.route("/submit-job", methods=["POST"])
+@app.route("/api/submit-job", methods=["POST"])
 def submit_job():
     """Endpoint API per registrare ed avviare un job asincrono."""
     data = request.get_json() or {}
@@ -215,7 +215,7 @@ def submit_job():
 
     return jsonify({"task_id": task.id}), 202
 
-@app.route("/job-status/<task_id>", methods=["GET"])
+@app.route("/api/job-status/<task_id>", methods=["GET"])
 def job_status(task_id):
     """Endpoint API per verificare lo stato di avanzamento sia da Celery che da DB."""
     # --- CYBERSECURITY: Sanificazione parametro ID ---
@@ -260,7 +260,7 @@ def job_status(task_id):
         
     return jsonify(response)
 
-@app.route("/jobs-history", methods=["GET"])
+@app.route("/api/jobs-history", methods=["GET"])
 def jobs_history():
     """Restituisce gli ultimi 10 Job registrati nel Database."""
     try:
@@ -289,7 +289,7 @@ def jobs_history():
     except Exception as e:
         return jsonify({"error": f"Errore lettura DB: {str(e)}"}), 500
 
-@app.route("/download-report/<task_id>", methods=["GET"])
+@app.route("/api/download-report/<task_id>", methods=["GET"])
 def download_report(task_id):
     """
     S3 GATEWAY PROXY: Scarica privatamente il file da MinIO 
