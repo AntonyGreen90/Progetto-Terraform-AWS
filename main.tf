@@ -17,3 +17,10 @@ data "aws_subnets" "default" {
     values = [data.aws_vpc.default.id]
   }
 }
+
+module "frontend" {
+  source = "./frontend"
+  bucket_name = var.bucket_name
+  env_name=var.env_name
+  domain_name=var.domain_name
+}
