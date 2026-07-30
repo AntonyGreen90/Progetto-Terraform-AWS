@@ -4,7 +4,7 @@ locals {
 }
 
 resource "aws_cloudfront_origin_access_control" "default" {
-  name                              = "default-oac"
+  name                              = "oac-${random_id.bucket_suffix.hex}"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"

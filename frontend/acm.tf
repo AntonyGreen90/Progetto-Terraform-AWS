@@ -3,7 +3,7 @@ module "acm" {
   version= "6.3.0"
 
   providers = {
-    aws = aws.us-east-1
+    aws = aws.virginia
   }
 
   domain_name = "${var.domain_name}"
