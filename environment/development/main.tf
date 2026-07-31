@@ -19,7 +19,7 @@ data "aws_subnets" "default" {
 }
 
 module "frontend" {
-  source = "./frontend"
+  source = "../../application/tirociniowebsite"
   bucket_name = var.bucket_name
   env_name=var.env_name
   domain_name=var.domain_name

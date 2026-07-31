@@ -29,7 +29,7 @@
             <h2 class="text-xl font-bold text-white mb-2">🔧 Sottometti un nuovo Job</h2>
             <p class="text-gray-400 text-sm mb-6">
                 Avvia il task. Al termine, il worker scriverà permanentemente lo stato sul <strong>Database SQLite</strong> 
-                e caricherà un file di audit su <strong>MinIO S3</strong>. L'app Flask fungerà da Gateway Proxy protetto per farti scaricare il report.
+                e caricherà un file di audit su <strong> un AWS S3 Bucket</strong>. L'app Flask fungerà da Gateway Proxy protetto per farti scaricare il report.
             </p>
             <div class="flex flex-col sm:flex-row items-end gap-4">
                 <div class="w-full sm:w-2/3">
@@ -163,7 +163,7 @@
                 
                 <div id="result-${taskId}" class="${showResult} mt-4 pt-3 border-t border-gray-700/50 text-xs font-mono bg-gray-900/50 p-3 rounded border border-gray-800">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <span class="text-emerald-400">✓ Report di sicurezza caricato su MinIO. Scaricabile in modalità "Proxy Sicuro":</span>
+                        <span class="text-emerald-400">✓ Report di sicurezza caricato su AWS S3. Scaricabile in modalità "Proxy Sicuro":</span>
                         <a href="/api/download-report/${taskId}" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded text-center transition-all">
                             Scarica Report (S3 Proxy)
                         </a>

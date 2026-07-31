@@ -3,9 +3,9 @@ output "bucket_id" {
     value= module.frontend.bucket_id
 }
 
-output "website_endpoint" {
-    description = "Endpoint to visit bucket website"
-    value= module.frontend.website_endpoint
+output "bucket_endpoint" {
+    description = "Endpoint to visit bucket"
+    value= module.frontend.bucket_endpoint
 }
 
 output "valkey_endpoint" {

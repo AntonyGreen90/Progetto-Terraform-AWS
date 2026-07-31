@@ -3,8 +3,8 @@ output "bucket_id" {
     value= aws_s3_bucket.websitebucket.id
 }
 
-output "website_endpoint" {
-    description = "Endpoint to visit bucket website"
+output "bucket_endpoint" {
+    description = "Endpoint to visit bucket"
     value= aws_s3_bucket_website_configuration.webconf.website_endpoint
 }
 
