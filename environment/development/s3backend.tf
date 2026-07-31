@@ -1,0 +1,1 @@
+# AWS S3 Storage for reports instead of Minio

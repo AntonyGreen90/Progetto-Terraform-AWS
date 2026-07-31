@@ -4,7 +4,7 @@ import random
 import sqlite3
 import boto3
 from botocore.client import Config
-from flask import Flask, jsonify, request, render_template_string
+from flask import Flask, jsonify, request
 
 # Configurazione dell'applicazione Flask
 app = Flask(__name__)
@@ -184,9 +184,9 @@ Il Worker Celery ha memorizzato questo asset in S3.
 # --- INTERFACCIA WEB (HTML / JAVASCRIPT CORRETTO PER LA STORICIZZAZIONE) ---
 # HTML_DASHBOARD, variabili esportata in index.html frontend
 
-# @app.route("/")
-# def index():
-#     return render_template_string(HTML_DASHBOARD)
+@app.route("/")  # Health check per Fargate messa al posto suo
+def health():
+    return jsonify({"status": "ok"})
 
 @app.route("/api/submit-job", methods=["POST"])
 def submit_job():

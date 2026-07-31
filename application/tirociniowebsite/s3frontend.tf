@@ -1,3 +1,5 @@
+# S3 Storage for index.hmtl frontend file
+
 resource "random_id" "bucket_suffix" {
   byte_length = 4  # Generates 8 hex characters
 }

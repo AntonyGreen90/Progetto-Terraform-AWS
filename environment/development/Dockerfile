@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt
 # questo RUN va prima di USER appuser perchè va lanciato da root
 USER appuser
 
-# EXPOSE 5000
+EXPOSE 5000
 
 CMD ["python", "app.py"] 

@@ -16,3 +16,7 @@ output "cloudfront_domain" {
   description = "Cloudfront domain without DNS"
   value = module.frontend.cloudfront_domain
 }
+
+output "ecr_url" {
+  value = aws_ecr_repository.project_app.repository_url
+}

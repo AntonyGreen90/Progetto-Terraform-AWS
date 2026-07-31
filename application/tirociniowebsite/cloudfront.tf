@@ -1,3 +1,5 @@
+# Cloudfront services for HTTPS connection and proxy
+
 locals {
   s3_origin_id = "myS3Origin"
   my_domain    = "${var.domain_name}"
