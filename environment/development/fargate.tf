@@ -78,9 +78,50 @@ module "ecs-fargate" {
     }
   ]
 
+  task_container_environment = {
+      REDIS_URL = "redis://${aws_elasticache_replication_group.valkey.primary_endpoint_address}:6379/0"
+      # questo fa si che il cluster repository dei container prenda come indirizzo per la cache l'indirizzo di valkey
+  }
+
   health_check = {
     port = "traffic-port"
     path = "/"
+  }
+
+  tags = {
+    Environment = "dev"
+    Project = "tirocinioepsilo"
+  }
+}
+
+module "ecs-celery" {
+  source = "umotif-public/ecs-fargate/aws"
+  version = "8.2.0"
+
+  name_prefix        = "ecs-celery-tirocinioeps"
+  vpc_id             = data.aws_vpc.default.id
+  private_subnet_ids = data.aws_subnets.default.ids
+
+  cluster_id         = aws_ecs_cluster.cluster.id
+
+  task_container_image   = "${aws_ecr_repository.project_app.repository_url}:latest"
+  task_container_assign_public_ip = true
+  task_definition_cpu    = 256
+  task_definition_memory = 512
+
+  task_container_command = [
+  "celery",
+  "-A",
+  "app.celery",
+  "worker",
+  "--loglevel=info"
+]
+
+  load_balanced = false
+
+  task_container_environment = {
+    REDIS_URL = "redis://${aws_elasticache_replication_group.valkey.primary_endpoint_address}:6379/0"
+    BUCKET_NAME = aws_s3_bucket.reportsbucket.bucket
   }
 
   tags = {

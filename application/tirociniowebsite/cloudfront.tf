@@ -19,6 +19,22 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id                = local.s3_origin_id
   }
 
+  # origin per la distribuzione cloudfront
+  origin {
+    domain_name = "alb-fargate-2012205622.eu-west-1.elb.amazonaws.com"
+    origin_id   = "alb-fargate-origin"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+
+      origin_ssl_protocols = [
+        "TLSv1.2"
+      ]
+    }
+  }
+
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "Some comment"
@@ -88,6 +104,33 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 86400
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "/api/*"
+
+    allowed_methods = [
+      "GET",
+      "HEAD",
+      "OPTIONS",
+      "PUT",
+      "POST",
+      "PATCH",
+      "DELETE"
+    ]
+
+    cached_methods = [
+      "GET",
+      "HEAD"
+    ]
+
+    target_origin_id = "alb-fargate-origin"
+
+    cache_policy_id = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+
+    viewer_protocol_policy = "redirect-to-https"
+
+    origin_request_policy_id = "216adef6-5c7f-47e4-b989-5492eafa07d3"
   }
 
   price_class = "PriceClass_200"

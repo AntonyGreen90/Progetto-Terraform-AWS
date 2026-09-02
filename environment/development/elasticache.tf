@@ -14,7 +14,25 @@ resource "aws_vpc_security_group_ingress_rule" "valkeysec" {
 
   ip_protocol = "tcp"
 
-  cidr_ipv4 = data.aws_vpc.default.cidr_block
+  # cidr_ipv4 = data.aws_vpc.default.cidr_block <---- questo permette a qualsiasi IP del VPC
+
+  referenced_security_group_id = module.ecs-fargate.service_sg_id # questo fa si che accetti solo dalle risorse 
+  # dal security group del fargate (con l'id preso da service_sg_id), quindi è molto meno permissivo
+}
+
+resource "aws_vpc_security_group_ingress_rule" "valkeysec_celery" {
+
+  security_group_id = aws_security_group.valkey.id
+
+  from_port = 6379
+  to_port   = 6379
+
+  ip_protocol = "tcp"
+
+  # cidr_ipv4 = data.aws_vpc.default.cidr_block <---- questo permette a qualsiasi IP del VPC
+
+  referenced_security_group_id = module.ecs-celery.service_sg_id # questo fa si che accetti solo dalle risorse 
+  # dal security group del fargate (con l'id preso da service_sg_id), quindi è molto meno permissivo
 }
 
 resource "aws_elasticache_subnet_group" "valkeysub" {

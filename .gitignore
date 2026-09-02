@@ -53,3 +53,4 @@ terraform.rc
 # planout
 
 *.txt
+tfplan

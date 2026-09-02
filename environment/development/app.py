@@ -14,10 +14,7 @@ REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 DB_PATH = os.environ.get("DB_PATH", "/data/jobs.db") # invece di /jobs.db mancava la cartella /data
 
 # MinIO / S3 config
-MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", "minio:9000") # invece di localhost:9000
-MINIO_ACCESS_KEY = os.environ.get("MINIO_ACCESS_KEY", "iso9000")   # accesskey e secret key cambiate
-MINIO_SECRET_KEY = os.environ.get("MINIO_SECRET_KEY", "sopra8000")
-BUCKET_NAME = "reports"
+BUCKET_NAME = os.environ.get("BUCKET_NAME")
 
 app.config.from_mapping(
     CELERY=dict(
@@ -69,17 +66,10 @@ def init_db():
     conn.close()
 
 def get_s3_client():
-    """Restituisce un client boto3 per comunicare privatamente con MinIO."""
-    endpoint = MINIO_ENDPOINT
-    if not endpoint.startswith("http://") and not endpoint.startswith("https://"):
-        endpoint = f"http://{endpoint}"
+    """Restituisce un client boto3 per comunicare con AWS S3."""
     return boto3.client(
         's3',
-        endpoint_url=endpoint,
-        aws_access_key_id=MINIO_ACCESS_KEY,
-        aws_secret_access_key=MINIO_SECRET_KEY,
-        config=Config(signature_version='s3v4'),
-        region_name='us-east-1'
+        region_name='eu-west-1'
     )
 
 def init_s3_bucket():
