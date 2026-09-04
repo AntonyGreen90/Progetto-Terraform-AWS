@@ -80,8 +80,37 @@ module "ecs-fargate" {
 
   task_container_environment = {
       REDIS_URL = "redis://${aws_elasticache_replication_group.valkey.primary_endpoint_address}:6379/0"
+      BUCKET_NAME = aws_s3_bucket.reportsbucket.bucket
       # questo fa si che il cluster repository dei container prenda come indirizzo per la cache l'indirizzo di valkey
   }
+
+ volume = [
+  {
+    name = "sqlite-volume"
+
+    efs_volume_configuration = [
+      {
+        file_system_id          = aws_efs_file_system.sqlite.id
+        root_directory          = "/"
+        transit_encryption      = "ENABLED"
+        transit_encryption_port = 2049
+
+        authorization_config = {
+          access_point_id = aws_efs_access_point.sqlite.id
+        }
+      }
+    ]
+  }
+]
+
+task_mount_points = [
+  {
+    sourceVolume  = "sqlite-volume"
+    containerPath = "/data"
+    readOnly      = false
+  }
+]
+
 
   health_check = {
     port = "traffic-port"
@@ -123,6 +152,33 @@ module "ecs-celery" {
     REDIS_URL = "redis://${aws_elasticache_replication_group.valkey.primary_endpoint_address}:6379/0"
     BUCKET_NAME = aws_s3_bucket.reportsbucket.bucket
   }
+
+ volume = [
+  {
+    name = "sqlite-volume"
+
+    efs_volume_configuration = [
+      {
+        file_system_id          = aws_efs_file_system.sqlite.id
+        root_directory          = "/"
+        transit_encryption      = "ENABLED"
+        transit_encryption_port = 2049
+
+        authorization_config = {
+          access_point_id = aws_efs_access_point.sqlite.id
+        }
+      }
+    ]
+  }
+]
+
+task_mount_points = [
+  {
+    sourceVolume  = "sqlite-volume"
+    containerPath = "/data"
+    readOnly      = false
+  }
+]
 
   tags = {
     Environment = "dev"

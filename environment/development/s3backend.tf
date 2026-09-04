@@ -31,3 +31,21 @@ resource "aws_iam_role_policy" "celery_s3" {
     ]
   })
 }
+
+resource "aws_iam_role_policy" "web_s3" {
+  name = "web-s3-reports"
+  role = module.ecs-fargate.task_role_name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject"
+        ]
+        Resource = "${aws_s3_bucket.reportsbucket.arn}/*"
+      }
+    ]
+  })
+}

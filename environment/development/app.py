@@ -110,6 +110,9 @@ def long_running_job(self, duration_seconds=10):
     compila un report TXT e lo carica su MinIO.
     """
     print(f"[WORKER] Avvio del job {self.request.id}...")
+    print(f"[DEBUG] UID={os.getuid()} GID={os.getgid()} DB_PATH={DB_PATH}")
+    print(f"[DEBUG] /data={os.path.exists('/data')} jobs.db={os.path.exists('/data/jobs.db')}")
+
     update_db_job(self.request.id, 'PROGRESS', 0)
     
     for i in range(1, duration_seconds + 1):
